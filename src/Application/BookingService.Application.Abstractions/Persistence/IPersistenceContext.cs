@@ -2,5 +2,7 @@ namespace BookingService.Application.Abstractions.Persistence;
 
 public interface IPersistenceContext
 {
-    // TODO: add repository properties
+    IBookingRepository Bookings { get; }
+
+    IBookingInfoRepository BookingInfos { get; }
 }

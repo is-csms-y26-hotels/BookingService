@@ -3,6 +3,7 @@
 namespace BookingService.Application.Models.Models;
 
 public record BookingInfo(
+    BookingInfoId Id,
     HotelId HotelId,
     RoomId RoomId,
     UserEmail UserEmail,

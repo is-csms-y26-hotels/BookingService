@@ -1,9 +1,8 @@
 ﻿namespace BookingService.Application.Models.Enums;
 
-public enum BookingStatus
+public enum BookingState
 {
     Created,
-    Edited,
     Submitted,
     Cancelled,
     Completed,
