@@ -8,6 +8,10 @@ import "google/protobuf/timestamp.proto";
 
 service BookingService {
   rpc CreateBooking(CreateBookingRequest) returns (CreateBookingResponse);
+  rpc PostponeBooking(PostponeBookingRequest) returns (PostponeBookingResponse);
+  rpc SubmitBooking(SubmitBookingRequest) returns (SubmitBookingResponse);
+  rpc CompleteBooking(CompleteBookingRequest) returns (CompleteBookingResponse);
+  rpc CancelBooking(CancelBookingRequest) returns (CancelBookingResponse);
 }
 
 enum BookingState {
@@ -22,7 +26,6 @@ enum BookingState {
 
 message CreateBookingRequest {
   string user_email = 1;
-  int64 hotel_id = 2;
   int64 room_id = 3;
   google.protobuf.Timestamp check_in_date = 4;
   google.protobuf.Timestamp check_out_date = 5;
@@ -32,9 +35,52 @@ message CreateBookingResponse {
   int64 booking_id = 1;
   BookingState booking_state = 2;
   string user_email = 3;
-  int64 hotel_id = 4;
   int64 room_id = 5;
   google.protobuf.Timestamp check_in_date = 6;
   google.protobuf.Timestamp check_out_date = 7;
   google.protobuf.Timestamp created_at = 8;
+}
+
+// PostponeBooking
+
+message PostponeBookingRequest {
+  int64 booking_id = 1;
+  google.protobuf.Timestamp new_check_in_date = 4;
+  google.protobuf.Timestamp new_check_out_date = 5;
+}
+
+message PostponeBookingResponse {
+  int64 booking_id = 1;
+  google.protobuf.Timestamp check_in_date = 6;
+  google.protobuf.Timestamp check_out_date = 7;
+}
+
+// Submit booking
+
+message SubmitBookingRequest {
+  int64 booking_id = 1;
+}
+
+message SubmitBookingResponse {
+  int64 booking_id = 1;
+}
+
+// Complete booking
+
+message CompleteBookingRequest {
+  int64 booking_id = 1;
+}
+
+message CompleteBookingResponse {
+  int64 booking_id = 1;
+}
+
+// Cancel booking
+
+message CancelBookingRequest {
+  int64 booking_id = 1;
+}
+
+message CancelBookingResponse {
+  int64 booking_id = 1;
 }

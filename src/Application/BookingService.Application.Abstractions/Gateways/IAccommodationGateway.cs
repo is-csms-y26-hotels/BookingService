@@ -1,8 +1,8 @@
-﻿using BookingService.Application.Abstractions.Gateways.Models.Accommodation;
+﻿using BookingService.Application.Models.ObjectValues;
 
 namespace BookingService.Application.Abstractions.Gateways;
 
 public interface IAccommodationGateway
 {
-    public Task<bool> RoomExistsAsync(RoomInfoModel model, CancellationToken cancellationToken);
+    public Task<bool> RoomExistsAsync(RoomId roomId, CancellationToken cancellationToken);
 }

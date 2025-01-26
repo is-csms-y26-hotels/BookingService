@@ -70,7 +70,7 @@ public class BookingRepository(
                                     b.booking_created_at
                            from bookings as b
                            where
-                               (cardinality(:booking_ids) = 0 or booking_id = any(:booking_ids))
+                               (cardinality(:booking_ids) = 0 or b.booking_id = any(:booking_ids))
                                and b.booking_id > :cursor
                            limit :page_size;
                            """;

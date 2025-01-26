@@ -7,5 +7,7 @@ public interface IBookingInfoRepository
 {
     public Task<BookingInfo> AddAsync(BookingInfo bookingInfo, CancellationToken cancellationToken);
 
+    public Task<BookingInfo> UpdateAsync(BookingInfo bookingInfo, CancellationToken cancellationToken);
+
     public IAsyncEnumerable<BookingInfo> QueryAsync(BookingInfoQuery query, CancellationToken cancellationToken);
 }

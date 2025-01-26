@@ -35,6 +35,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingService", "src\Booki
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingService.Infrastructure.Gateways", "src\Infrastructure\BookingService.Infrastructure.Gateways\BookingService.Infrastructure.Gateways.csproj", "{6010114D-12AF-4657-8AFC-91C14ECE3060}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{939DC21A-6DE4-4F19-ABB6-4C6FC8C8CB45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccommodationGateway", "src\External\AccommodationGateway\AccommodationGateway.csproj", "{E55D14E2-9A75-4160-8DAC-780648FACE78}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +58,8 @@ Global
 		{AE85F8D2-4986-40AE-A92C-683CE1DB59BC} = {A5DDAC88-3B8F-4674-8E0C-F8A50A52ACD3}
 		{AE079871-926E-427E-9F16-8FFD3C6B6CC2} = {683CE8ED-DAEA-4EAB-B1B4-FF5098763CFF}
 		{6010114D-12AF-4657-8AFC-91C14ECE3060} = {6612692B-A111-4856-A058-9CF4C2672F92}
+		{939DC21A-6DE4-4F19-ABB6-4C6FC8C8CB45} = {A5DDAC88-3B8F-4674-8E0C-F8A50A52ACD3}
+		{E55D14E2-9A75-4160-8DAC-780648FACE78} = {939DC21A-6DE4-4F19-ABB6-4C6FC8C8CB45}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CB41BAB3-2742-49A4-9534-C33C9CC21103}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -96,5 +102,9 @@ Global
 		{6010114D-12AF-4657-8AFC-91C14ECE3060}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6010114D-12AF-4657-8AFC-91C14ECE3060}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6010114D-12AF-4657-8AFC-91C14ECE3060}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E55D14E2-9A75-4160-8DAC-780648FACE78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E55D14E2-9A75-4160-8DAC-780648FACE78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E55D14E2-9A75-4160-8DAC-780648FACE78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E55D14E2-9A75-4160-8DAC-780648FACE78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -3,29 +3,26 @@ using BookingService.Application.Models.ObjectValues;
 
 namespace BookingService.Application.Contracts.Bookings.Operations;
 
-public static class CreateBooking
+public static class PostponeBooking
 {
     public readonly record struct Request(
-        UserEmail UserEmail,
-        RoomId RoomId,
-        DateTimeOffset CheckInDate,
-        DateTimeOffset CheckOutDate);
+        BookingId BookingId,
+        DateTimeOffset NewCheckInDate,
+        DateTimeOffset NewCheckOutDate);
 
     public abstract record Result
     {
         private Result() { }
 
-        public sealed record Created(
+        public sealed record Updated(
             BookingId BookingId,
-            BookingState BookingState,
-            RoomId BookingRoomId,
-            UserEmail BookingUserEmail,
             DateTimeOffset BookingCheckInDate,
-            DateTimeOffset BookingCheckOutDate,
-            DateTimeOffset BookingCreatedAt) : Result;
+            DateTimeOffset BookingCheckOutDate) : Result;
 
         public sealed record RoomNotFound : Result;
 
         public sealed record RoomNotAvailable : Result;
+
+        public sealed record InvalidBookingState(BookingState BookingState) : Result;
     }
 }

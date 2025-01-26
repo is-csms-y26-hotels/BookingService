@@ -6,10 +6,12 @@ namespace BookingService.Application.Abstractions.Persistence.Queries;
 [GenerateBuilder]
 public partial record BookingInfoQuery(
     BookingInfoId[] BookingInfoIds,
-    HotelId[] HotelIds,
+    BookingInfoId[] BookingInfoToExcludeIds,
     RoomId[] RoomIds,
     UserEmail[] UserEmails,
-    DateTimeOffset? MinCheckInDate,
-    DateTimeOffset? MaxCheckOutDate,
+    BookingInfoQuery.DateRangeModel? DateRange,
     [RequiredValue] int PageSize,
-    long Cursor);
+    long Cursor)
+{
+    public record DateRangeModel(DateTimeOffset Start, DateTimeOffset End);
+}
