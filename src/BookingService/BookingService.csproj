@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <ItemGroup>
+        <ProjectReference Include="..\Application\BookingService.Application\BookingService.Application.csproj"/>
+        <ProjectReference Include="..\Infrastructure\BookingService.Infrastructure.Persistence\BookingService.Infrastructure.Persistence.csproj"/>
+        <ProjectReference Include="..\Presentation\BookingService.Presentation.Grpc\BookingService.Presentation.Grpc.csproj"/>
+        <ProjectReference Include="..\Presentation\BookingService.Presentation.Kafka\BookingService.Presentation.Kafka.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Itmo.Dev.Platform.Observability" />
+        <PackageReference Include="Itmo.Dev.Platform.BackgroundTasks.Hangfire.Postgres" />
+        <PackageReference Include="Itmo.Dev.Platform.BackgroundTasks.Postgres" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="appsettings.*.json">
+            <DependentUpon>appsettings.json</DependentUpon>
+        </Content>
+    </ItemGroup>
+
+</Project>

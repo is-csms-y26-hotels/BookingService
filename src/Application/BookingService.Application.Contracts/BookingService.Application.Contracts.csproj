@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\BookingService.Application.Models\BookingService.Application.Models.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Itmo.Dev.Platform.Events" />
+    </ItemGroup>
+
+</Project>
