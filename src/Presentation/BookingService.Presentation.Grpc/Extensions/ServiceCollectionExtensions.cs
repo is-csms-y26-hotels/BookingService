@@ -1,3 +1,4 @@
+using Itmo.Dev.Platform.Grpc.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BookingService.Presentation.Grpc.Extensions;
@@ -8,6 +9,8 @@ public static class ServiceCollectionExtensions
     {
         collection.AddGrpc();
         collection.AddGrpcReflection();
+
+        collection.AddPlatformGrpcServices(builder => builder);
 
         return collection;
     }

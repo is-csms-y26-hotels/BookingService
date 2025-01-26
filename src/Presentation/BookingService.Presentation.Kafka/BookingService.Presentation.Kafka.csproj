@@ -6,11 +6,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Protobuf Include="protos\*.proto" GrpcServices="None"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="protos\"/>
+        <Protobuf Include="protos\**\*.proto" GrpcServices="Server"/>
     </ItemGroup>
 
     <ItemGroup>

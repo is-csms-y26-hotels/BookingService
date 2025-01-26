@@ -1,5 +1,7 @@
 using BookingService.Application.Abstractions.Persistence;
+using BookingService.Application.Abstractions.Persistence.Repositories;
 using BookingService.Infrastructure.Persistence.Plugins;
+using BookingService.Infrastructure.Persistence.Repositories;
 using Itmo.Dev.Platform.Persistence.Abstractions.Extensions;
 using Itmo.Dev.Platform.Persistence.Postgres.Extensions;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +18,9 @@ public static class ServiceCollectionExtensions
                 .WithMigrationsFrom(typeof(IAssemblyMarker).Assembly)
                 .WithDataSourcePlugin<MappingPlugin>()));
 
-        // TODO: add repositories
+        collection.AddScoped<IBookingRepository, BookingRepository>();
+        collection.AddScoped<IBookingInfoRepository, BookingInfoRepository>();
+
         collection.AddScoped<IPersistenceContext, PersistenceContext>();
 
         return collection;

@@ -1,6 +1,5 @@
 ﻿using BookingService.Application.Models.ObjectValues;
 using SourceKit.Generators.Builder.Annotations;
-using System;
 
 namespace BookingService.Application.Abstractions.Persistence.Queries;
 

@@ -12,6 +12,7 @@
     <PackageVersion Include="Itmo.Dev.Platform.BackgroundTasks.Hangfire.Postgres" Version="2.2.234" />
     <PackageVersion Include="Itmo.Dev.Platform.BackgroundTasks.Postgres" Version="2.2.245" />
     <PackageVersion Include="Itmo.Dev.Platform.Events" Version="1.3.204" />
+    <PackageVersion Include="Itmo.Dev.Platform.Grpc" Version="1.2.249" />
     <PackageVersion Include="Itmo.Dev.Platform.Kafka" Version="2.3.247" />
     <PackageVersion Include="Itmo.Dev.Platform.Observability" Version="1.4.234" />
     <PackageVersion Include="Itmo.Dev.Platform.Persistence.Postgres" Version="1.2.245" />

@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package bookings;
+
+option csharp_namespace = "Bookings.BookingsService.Contracts";
+
+import "google/protobuf/timestamp.proto";
+
+service BookingService {
+  rpc CreateBooking(CreateBookingRequest) returns (CreateBookingResponse);
+}
+
+enum BookingState {
+  BOOKING_STATE_UNSPECIFIED = 0;
+  BOOKING_STATE_CREATED = 1;
+  BOOKING_STATE_SUBMITTED = 3;
+  BOOKING_STATE_CANCELLED = 4;
+  BOOKING_STATE_COMPLETED = 5;
+}
+
+// CreateBooking
+
+message CreateBookingRequest {
+  string user_email = 1;
+  int64 hotel_id = 2;
+  int64 room_id = 3;
+  google.protobuf.Timestamp check_in_date = 4;
+  google.protobuf.Timestamp check_out_date = 5;
+}
+
+message CreateBookingResponse {
+  int64 booking_id = 1;
+  BookingState booking_state = 2;
+  string user_email = 3;
+  int64 hotel_id = 4;
+  int64 room_id = 5;
+  google.protobuf.Timestamp check_in_date = 6;
+  google.protobuf.Timestamp check_out_date = 7;
+  google.protobuf.Timestamp created_at = 8;
+}

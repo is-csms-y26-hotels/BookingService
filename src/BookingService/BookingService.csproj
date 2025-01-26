@@ -2,6 +2,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Application\BookingService.Application\BookingService.Application.csproj"/>
+        <ProjectReference Include="..\Infrastructure\BookingService.Infrastructure.Gateways\BookingService.Infrastructure.Gateways.csproj" />
         <ProjectReference Include="..\Infrastructure\BookingService.Infrastructure.Persistence\BookingService.Infrastructure.Persistence.csproj"/>
         <ProjectReference Include="..\Presentation\BookingService.Presentation.Grpc\BookingService.Presentation.Grpc.csproj"/>
         <ProjectReference Include="..\Presentation\BookingService.Presentation.Kafka\BookingService.Presentation.Kafka.csproj"/>

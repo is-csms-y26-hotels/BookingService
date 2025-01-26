@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package bookings;
+
+option csharp_namespace = "Bookings.Kafka.Contracts";
+
+message BookingKey {
+  int64 booking_id = 1;
+}
+
+message BookingValue {
+  
+  oneof event {
+    BookingSubmission booking_submission = 1;
+  }
+  
+  message BookingSubmission {
+    int64 booking_id = 1;
+  }
+}

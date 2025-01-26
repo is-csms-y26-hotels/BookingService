@@ -10,18 +10,15 @@ using BookingService.Application.Models.Models;
 using BookingService.Application.Models.ObjectValues;
 using Itmo.Dev.Platform.Events;
 using Itmo.Dev.Platform.Persistence.Abstractions.Transactions;
-using System;
 using System.Data;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace BookingService.Application.Bookings;
 
-public class BookingService(
+public class ReservationService(
     IPersistenceContext persistenceContext,
     IPersistenceTransactionProvider transactionProvider,
     IAccommodationGateway accommodationGateway,
-    IEventPublisher eventPublisher) : IBookingService
+    IEventPublisher eventPublisher) : IReservationService
 {
     public async Task<CreateBooking.Result> CreateBookingAsync(
         CreateBooking.Request request,
@@ -66,24 +63,24 @@ public class BookingService(
             new Booking(
                 BookingId.Default,
                 BookingState.Created,
-                bookingInfo.Id,
-                DateTimeOffset.Now),
+                bookingInfo.BookingInfoId,
+                DateTimeOffset.UtcNow),
             cancellationToken);
 
-        var evt = new BookingSubmissionEvent(booking.Id.Value);
+        var evt = new BookingSubmissionEvent(booking.BookingId.Value);
 
         await eventPublisher.PublishAsync(evt, cancellationToken);
 
         await transaction.CommitAsync(cancellationToken);
 
         return new CreateBooking.Result.Created(
-            booking.Id,
-            booking.State,
-            bookingInfo.HotelId,
-            bookingInfo.RoomId,
-            bookingInfo.UserEmail,
-            bookingInfo.CheckInDate,
-            bookingInfo.CheckOutDate,
-            booking.CreatedAt);
+            booking.BookingId,
+            booking.BookingState,
+            bookingInfo.BookingInfoHotelId,
+            bookingInfo.BookingInfoRoomId,
+            bookingInfo.BookingInfoUserEmail,
+            bookingInfo.BookingInfoCheckInDate,
+            bookingInfo.BookingInfoCheckOutDate,
+            booking.BookingCreatedAt);
     }
 }

@@ -4,14 +4,9 @@ using BookingService.Application.Models.Models;
 using BookingService.Application.Models.ObjectValues;
 using Itmo.Dev.Platform.Persistence.Abstractions.Commands;
 using Itmo.Dev.Platform.Persistence.Abstractions.Connections;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace BookingService.Infrastructure.Persistence.Repositories;
 
@@ -42,13 +37,15 @@ public class BookingInfoRepository(
         await using IPersistenceConnection connection = await connectionProvider.GetConnectionAsync(cancellationToken);
 
         await using IPersistenceCommand command = connection.CreateCommand(sql)
-            .AddParameter("booking_info_hotel_id", bookingInfo.HotelId.Value)
-            .AddParameter("booking_info_room_id", bookingInfo.RoomId.Value)
-            .AddParameter("booking_info_user_email", bookingInfo.UserEmail.Value)
-            .AddParameter("booking_info_checkin_date", bookingInfo.CheckInDate)
-            .AddParameter("booking_info_checkout_date", bookingInfo.CheckOutDate);
+            .AddParameter("booking_info_hotel_id", bookingInfo.BookingInfoHotelId.Value)
+            .AddParameter("booking_info_room_id", bookingInfo.BookingInfoRoomId.Value)
+            .AddParameter("booking_info_user_email", bookingInfo.BookingInfoUserEmail.Value)
+            .AddParameter("booking_info_checkin_date", bookingInfo.BookingInfoCheckInDate)
+            .AddParameter("booking_info_checkout_date", bookingInfo.BookingInfoCheckOutDate);
 
         DbDataReader reader = await command.ExecuteReaderAsync(cancellationToken);
+
+        await reader.ReadAsync(cancellationToken);
 
         return ReadBookingInfo(reader);
     }

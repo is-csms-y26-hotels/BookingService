@@ -1,8 +1,5 @@
 ﻿using BookingService.Application.Abstractions.Persistence.Queries;
 using BookingService.Application.Models.Models;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace BookingService.Application.Abstractions.Persistence.Repositories;
 

@@ -5,14 +5,9 @@ using BookingService.Application.Models.Models;
 using BookingService.Application.Models.ObjectValues;
 using Itmo.Dev.Platform.Persistence.Abstractions.Commands;
 using Itmo.Dev.Platform.Persistence.Abstractions.Connections;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace BookingService.Infrastructure.Persistence.Repositories;
 
@@ -30,11 +25,13 @@ public class BookingRepository(
         await using IPersistenceConnection connection = await connectionProvider.GetConnectionAsync(cancellationToken);
 
         await using IPersistenceCommand command = connection.CreateCommand(sql)
-            .AddParameter("booking_state", booking.State)
-            .AddParameter("booking_info_id", booking.InfoId.Value)
-            .AddParameter("booking_created_at", booking.CreatedAt);
+            .AddParameter("booking_state", booking.BookingState)
+            .AddParameter("booking_info_id", booking.BookingInfoId.Value)
+            .AddParameter("booking_created_at", booking.BookingCreatedAt);
 
         DbDataReader reader = await command.ExecuteReaderAsync(cancellationToken);
+
+        await reader.ReadAsync(cancellationToken);
 
         return ReadBooking(reader);
     }

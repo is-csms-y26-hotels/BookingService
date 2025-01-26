@@ -1,13 +1,10 @@
 #pragma warning disable CA1506
 
 using BookingService.Application.Extensions;
+using BookingService.Infrastructure.Gateways;
 using BookingService.Infrastructure.Persistence.Extensions;
 using BookingService.Presentation.Grpc.Extensions;
 using BookingService.Presentation.Kafka.Extensions;
-using Itmo.Dev.Platform.BackgroundTasks.Extensions;
-using Itmo.Dev.Platform.BackgroundTasks.Hangfire.Extensions;
-using Itmo.Dev.Platform.BackgroundTasks.Hangfire.Postgres.Extensions;
-using Itmo.Dev.Platform.BackgroundTasks.Postgres.Extensions;
 using Itmo.Dev.Platform.Common.Extensions;
 using Itmo.Dev.Platform.Events;
 using Itmo.Dev.Platform.Observability;
@@ -26,17 +23,18 @@ builder.AddPlatformObservability();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructurePersistence();
+builder.Services.AddInfrastructureGateways();
 builder.Services.AddPresentationGrpc();
 builder.Services.AddPresentationKafka(builder.Configuration);
 
-builder.Services.AddPlatformBackgroundTasks(configurator => configurator
+/*builder.Services.AddPlatformBackgroundTasks(configurator => configurator
     .UsePostgresPersistence(postgres => postgres.BindConfiguration("Infrastructure:BackgroundTasks:Persistence"))
     .ConfigureScheduling(scheduling => scheduling.BindConfiguration("Infrastructure:BackgroundTasks:Scheduling"))
     .UseHangfireScheduling(hangfire => hangfire
         .ConfigureOptions(o => o.BindConfiguration("Infrastructure:BackgroundTasks:Scheduling:Hangfire"))
         .UsePostgresJobStorage())
     .ConfigureExecution(builder.Configuration.GetSection("Infrastructure:BackgroundTasks:Execution"))
-    .AddApplicationBackgroundTasks());
+    .AddApplicationBackgroundTasks());*/
 
 builder.Services.AddPlatformEvents(b => b.AddPresentationKafkaHandlers());
 

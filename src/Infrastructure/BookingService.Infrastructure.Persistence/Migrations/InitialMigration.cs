@@ -12,7 +12,7 @@ public class InitialMigration : SqlMigration
                create table booking_infos
                (
                    booking_info_id              bigint primary key generated always as identity,
-                   booking_info__id        bigint not null,
+                   booking_info_hotel_id         bigint not null,
                    booking_info_room_id         bigint not null,
                    booking_info_user_email      text not null,
                    booking_info_checkin_date    timestamp with time zone not null,

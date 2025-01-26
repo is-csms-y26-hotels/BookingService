@@ -1,6 +1,5 @@
 ﻿using BookingService.Application.Models.Enums;
 using BookingService.Application.Models.ObjectValues;
-using System;
 
 namespace BookingService.Application.Contracts.Bookings.Operations;
 
@@ -19,13 +18,13 @@ public static class CreateBooking
 
         public sealed record Created(
             BookingId BookingId,
-            BookingState State,
-            HotelId HotelId,
-            RoomId RoomId,
-            UserEmail UserEmail,
-            DateTimeOffset CheckInDate,
-            DateTimeOffset CheckOutDate,
-            DateTimeOffset CreatedAt) : Result;
+            BookingState BookingState,
+            HotelId BookingHotelId,
+            RoomId BookingRoomId,
+            UserEmail BookingUserEmail,
+            DateTimeOffset BookingCheckInDate,
+            DateTimeOffset BookingCheckOutDate,
+            DateTimeOffset BokingCreatedAt) : Result;
 
         public sealed record RoomNotFound : Result;
 

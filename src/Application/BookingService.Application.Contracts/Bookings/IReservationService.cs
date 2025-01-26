@@ -2,7 +2,7 @@
 
 namespace BookingService.Application.Contracts.Bookings;
 
-public interface IBookingService
+public interface IReservationService
 {
     public Task<CreateBooking.Result> CreateBookingAsync(
         CreateBooking.Request request,

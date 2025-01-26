@@ -33,8 +33,7 @@
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
       ALLOW_PLAINTEXT_LISTENER: yes
       KAFKA_CREATE_TOPICS: >
-        order_creation:1:1,
-        order_processing:1:1,
+        bookings:1:1,
     depends_on:
       - zookeeper
     networks:

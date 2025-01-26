@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingService.Presentation
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingService", "src\BookingService\BookingService.csproj", "{AE85F8D2-4986-40AE-A92C-683CE1DB59BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingService.Infrastructure.Gateways", "src\Infrastructure\BookingService.Infrastructure.Gateways\BookingService.Infrastructure.Gateways.csproj", "{6010114D-12AF-4657-8AFC-91C14ECE3060}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,7 @@ Global
 		{59AFF02F-828D-4BF6-A5AC-C56A1F30EF6B} = {683CE8ED-DAEA-4EAB-B1B4-FF5098763CFF}
 		{AE85F8D2-4986-40AE-A92C-683CE1DB59BC} = {A5DDAC88-3B8F-4674-8E0C-F8A50A52ACD3}
 		{AE079871-926E-427E-9F16-8FFD3C6B6CC2} = {683CE8ED-DAEA-4EAB-B1B4-FF5098763CFF}
+		{6010114D-12AF-4657-8AFC-91C14ECE3060} = {6612692B-A111-4856-A058-9CF4C2672F92}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CB41BAB3-2742-49A4-9534-C33C9CC21103}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -89,5 +92,9 @@ Global
 		{AE079871-926E-427E-9F16-8FFD3C6B6CC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE079871-926E-427E-9F16-8FFD3C6B6CC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE079871-926E-427E-9F16-8FFD3C6B6CC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6010114D-12AF-4657-8AFC-91C14ECE3060}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6010114D-12AF-4657-8AFC-91C14ECE3060}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6010114D-12AF-4657-8AFC-91C14ECE3060}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6010114D-12AF-4657-8AFC-91C14ECE3060}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
