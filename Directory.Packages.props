@@ -4,6 +4,8 @@
     <EnablePackageVersionOverride>false</EnablePackageVersionOverride>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="Google.Api.CommonProtos" Version="2.16.0" />
+    <PackageVersion Include="Google.Protobuf" Version="3.29.3" />
     <PackageVersion Include="Grpc.AspNetCore" Version="2.60.0" />
     <PackageVersion Include="Grpc.AspNetCore.Server.Reflection" Version="2.60.0" />
     <PackageVersion Include="Grpc.Tools" Version="2.60.0" />
@@ -16,6 +18,8 @@
     <PackageVersion Include="Itmo.Dev.Platform.Kafka" Version="2.3.247" />
     <PackageVersion Include="Itmo.Dev.Platform.Observability" Version="1.4.234" />
     <PackageVersion Include="Itmo.Dev.Platform.Persistence.Postgres" Version="1.2.245" />
+    <PackageVersion Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="8.0.12" />
+    <PackageVersion Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.8.12" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageVersion Include="SourceKit.Generators.Builder" Version="1.2.45" />
@@ -25,6 +29,7 @@
     <PackageVersion Include="SourceKit.Analyzers.Nullable" Version="1.0.45" />
     <PackageVersion Include="SourceKit.Analyzers.Properties" Version="1.0.45" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.435" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="7.2.0" />
     <PackageVersion Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
 </Project>

@@ -7,7 +7,9 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddPresentationGrpc(this IServiceCollection collection)
     {
-        collection.AddGrpc();
+        collection
+            .AddGrpc()
+            .AddJsonTranscoding();
         collection.AddGrpcReflection();
 
         collection.AddPlatformGrpcServices(builder => builder);

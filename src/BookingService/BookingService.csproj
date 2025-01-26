@@ -12,6 +12,7 @@
         <PackageReference Include="Itmo.Dev.Platform.Observability" />
         <PackageReference Include="Itmo.Dev.Platform.BackgroundTasks.Hangfire.Postgres" />
         <PackageReference Include="Itmo.Dev.Platform.BackgroundTasks.Postgres" />
+        <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" />
     </ItemGroup>
 
     <ItemGroup>

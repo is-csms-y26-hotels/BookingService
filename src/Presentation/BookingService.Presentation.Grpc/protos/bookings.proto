@@ -4,14 +4,35 @@ package bookings;
 
 option csharp_namespace = "Bookings.BookingsService.Contracts";
 
+import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 service BookingService {
-  rpc CreateBooking(CreateBookingRequest) returns (CreateBookingResponse);
-  rpc PostponeBooking(PostponeBookingRequest) returns (PostponeBookingResponse);
-  rpc SubmitBooking(SubmitBookingRequest) returns (SubmitBookingResponse);
-  rpc CompleteBooking(CompleteBookingRequest) returns (CompleteBookingResponse);
-  rpc CancelBooking(CancelBookingRequest) returns (CancelBookingResponse);
+  rpc CreateBooking(CreateBookingRequest) returns (CreateBookingResponse) {
+    option (google.api.http) = {
+      get: "/v1/bookings/create"
+    };
+  };
+  rpc PostponeBooking(PostponeBookingRequest) returns (PostponeBookingResponse) {
+    option (google.api.http) = {
+      get: "/v1/bookings/postpone"
+    };
+  };
+  rpc SubmitBooking(SubmitBookingRequest) returns (SubmitBookingResponse) {
+    option (google.api.http) = {
+      get: "/v1/bookings/submit"
+    };
+  };
+  rpc CompleteBooking(CompleteBookingRequest) returns (CompleteBookingResponse) {
+    option (google.api.http) = {
+      get: "/v1/bookings/complete"
+    };
+  };
+  rpc CancelBooking(CancelBookingRequest) returns (CancelBookingResponse) {
+    option (google.api.http) = {
+      get: "/v1/bookings/cancel"
+    };
+  };
 }
 
 enum BookingState {

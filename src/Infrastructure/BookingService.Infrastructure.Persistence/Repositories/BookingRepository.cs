@@ -56,6 +56,8 @@ public class BookingRepository(
 
         DbDataReader reader = await command.ExecuteReaderAsync(cancellationToken);
 
+        await reader.ReadAsync(cancellationToken);
+
         return ReadBooking(reader);
     }
 
