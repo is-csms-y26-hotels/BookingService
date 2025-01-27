@@ -11,20 +11,8 @@ public static class ServiceCollectionExtensions
         this IServiceCollection collection,
         IConfiguration configuration)
     {
-        // const string consumerKey = "Presentation:Kafka:Consumers";
         const string producerKey = "Presentation:Kafka:Producers";
 
-        // TODO: add consumers and producers
-        // consumer example:
-        // .AddConsumer(b => b
-        //     .WithKey<MessageKey>()
-        //     .WithValue<MessageValue>()
-        //     .WithConfiguration(configuration.GetSection($"{consumerKey}:MessageName"))
-        //     .DeserializeKeyWithProto()
-        //     .DeserializeValueWithProto()
-        //     .HandleWith<MessageHandler>())
-        //
-        // producer example:
         collection.AddPlatformKafka(builder => builder
                 .ConfigureOptions(configuration.GetSection("Presentation:Kafka"))
                 .AddProducer(b => b
@@ -32,7 +20,8 @@ public static class ServiceCollectionExtensions
                     .WithValue<BookingValue>()
                     .WithConfiguration(configuration.GetSection($"{producerKey}:Bookings"))
                     .SerializeKeyWithProto()
-                    .SerializeValueWithProto()));
+                    .SerializeValueWithProto()
+                    .WithOutbox()));
 
         return collection;
     }

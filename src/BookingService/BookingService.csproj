@@ -9,6 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Itmo.Dev.Platform.MessagePersistence.Postgres" />
         <PackageReference Include="Itmo.Dev.Platform.Observability" />
         <PackageReference Include="Itmo.Dev.Platform.BackgroundTasks.Hangfire.Postgres" />
         <PackageReference Include="Itmo.Dev.Platform.BackgroundTasks.Postgres" />

@@ -222,7 +222,7 @@ public class ReservationService(
                     booking.BookingInfo.BookingInfoCheckOutDate))
             .ToListAsync(cancellationToken);
 
-        var availableRanges = GetAvailableRanges(
+        IReadOnlyCollection<(DateTimeOffset Start, DateTimeOffset End)> availableRanges = GetAvailableRanges(
             bookingsRanges,
             request.StartDate,
             request.EndDate);
@@ -231,29 +231,30 @@ public class ReservationService(
     }
 
     private static IReadOnlyCollection<(DateTimeOffset Start, DateTimeOffset End)> GetAvailableRanges(
-        IReadOnlyCollection<(DateTimeOffset Start, DateTimeOffset End)> bookedPeriods,
+        IReadOnlyCollection<(DateTimeOffset Start, DateTimeOffset End)> bookedRanges,
         DateTimeOffset searchStart,
         DateTimeOffset searchEnd)
     {
-        var freePeriods = new List<(DateTimeOffset Start, DateTimeOffset End)>();
+        var availableRanges = new List<(DateTimeOffset Start, DateTimeOffset End)>();
+
         DateTimeOffset currentStart = searchStart;
 
-        foreach ((DateTimeOffset start, DateTimeOffset end) in bookedPeriods)
+        foreach ((DateTimeOffset start, DateTimeOffset end) in bookedRanges)
         {
-            DateTimeOffset adjustedStart = start.AddDays(1);
-            DateTimeOffset adjustedEnd = end.AddDays(-1);
+            if (currentStart < start)
+            {
+                availableRanges.Add((currentStart, start.AddDays(-1)));
+            }
 
-            if (adjustedStart > currentStart)
-                freePeriods.Add((currentStart, adjustedStart));
-
-            if (adjustedEnd >= currentStart)
-                currentStart = adjustedEnd.AddDays(1);
+            currentStart = end.AddDays(1);
         }
 
-        if (currentStart < searchEnd)
-            freePeriods.Add((currentStart, searchEnd));
+        if (currentStart <= searchEnd)
+        {
+            availableRanges.Add((currentStart, searchEnd));
+        }
 
-        return freePeriods;
+        return availableRanges;
     }
 
     private async Task<BookingId> UpdateBookingState(
