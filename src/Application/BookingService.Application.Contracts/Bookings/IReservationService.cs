@@ -23,4 +23,8 @@ public interface IReservationService
     public Task<CancelBooking.Result> CancelBookingAsync(
         CancelBooking.Request request,
         CancellationToken cancellationToken);
+
+    public Task<GetRoomAvailableDateRanges.Result> GetRoomAvailableDateRangesAsync(
+        GetRoomAvailableDateRanges.Request request,
+        CancellationToken cancellationToken);
 }

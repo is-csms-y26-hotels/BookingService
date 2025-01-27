@@ -33,20 +33,16 @@ builder.Services.AddPlatformEvents(b => b.AddPresentationKafkaHandlers());
 builder.Services.AddUtcDateTimeProvider();
 
 builder.Services.AddGrpcSwagger();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc(
+builder.Services.AddSwaggerGen(c => c.SwaggerDoc(
         "v1",
-        new OpenApiInfo { Title = "Hotels BookingService API", Version = "v1" });
-});
+        new OpenApiInfo { Title = "Hotels BookingService API", Version = "v1" }));
 
 WebApplication app = builder.Build();
 
 app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hotels BookingService API v1");
-});
+app.UseSwaggerUI(c => c.SwaggerEndpoint(
+    "/swagger/v1/swagger.json",
+    "Hotels BookingService API v1"));
 
 app.UseRouting();
 

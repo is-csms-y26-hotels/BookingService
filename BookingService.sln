@@ -37,7 +37,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingService.Infrastructu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{939DC21A-6DE4-4F19-ABB6-4C6FC8C8CB45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccommodationGateway", "src\External\AccommodationGateway\AccommodationGateway.csproj", "{E55D14E2-9A75-4160-8DAC-780648FACE78}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingService.External.AccommodationGateway", "src\External\BookingService.External.AccommodationGateway\BookingService.External.AccommodationGateway.csproj", "{E55D14E2-9A75-4160-8DAC-780648FACE78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

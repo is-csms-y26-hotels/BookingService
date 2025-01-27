@@ -19,7 +19,6 @@ public static class ServiceCollectionExtensions
                 .WithDataSourcePlugin<MappingPlugin>()));
 
         collection.AddScoped<IBookingRepository, BookingRepository>();
-        collection.AddScoped<IBookingInfoRepository, BookingInfoRepository>();
 
         collection.AddScoped<IPersistenceContext, PersistenceContext>();
 

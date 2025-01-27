@@ -6,5 +6,5 @@ namespace BookingService.Application.Models.Models;
 public record Booking(
     BookingId BookingId,
     BookingState BookingState,
-    BookingInfoId BookingInfoId,
+    BookingInfo BookingInfo,
     DateTimeOffset BookingCreatedAt);

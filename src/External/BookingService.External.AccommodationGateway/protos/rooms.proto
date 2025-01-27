@@ -1,7 +1,7 @@
 syntax = "proto3";
 package AccommodationService.Presentation.Grpc.protos.Rooms;
 option csharp_namespace = "Accommodation.Service.Presentation.Grpc";
-import "money.proto";
+import "protos/money.proto";
 
 service RoomService {
   rpc GetRoomsByHotel(GetRoomsByHotelRequest) returns (GetRoomsByHotelResponse);

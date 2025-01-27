@@ -38,13 +38,9 @@ public class BookingController(
                 CreatedAt = created.BookingCreatedAt.ToTimestamp(),
             },
 
-            CreateBooking.Result.RoomNotAvailable _ => throw new RpcException(new Status(
-                StatusCode.InvalidArgument,
-                "Room not available")),
+            CreateBooking.Result.RoomNotAvailable _ => ThrowRoomNotAvailableRpcException<CreateBookingResponse>(),
 
-            CreateBooking.Result.RoomNotFound _ => throw new RpcException(new Status(
-                StatusCode.NotFound,
-                "Room not found")),
+            CreateBooking.Result.RoomNotFound _ => ThrowRoomNotFoundRpcException<CreateBookingResponse>(),
 
             _ => throw new UnreachableException(),
         };
@@ -70,13 +66,12 @@ public class BookingController(
                 CheckOutDate = created.BookingCheckOutDate.ToTimestamp(),
             },
 
-            PostponeBooking.Result.RoomNotAvailable _ => throw new RpcException(new Status(
-                StatusCode.InvalidArgument,
-                "Room not available")),
+            PostponeBooking.Result.RoomNotAvailable _ => ThrowRoomNotAvailableRpcException<PostponeBookingResponse>(),
 
-            PostponeBooking.Result.RoomNotFound _ => throw new RpcException(new Status(
-                StatusCode.NotFound,
-                "Room not found")),
+            PostponeBooking.Result.InvalidBookingState invalidBookingState =>
+                ThrowInvalidBookingStateRpcException<PostponeBookingResponse>(invalidBookingState.BookingState),
+
+            PostponeBooking.Result.RoomNotFound _ => ThrowRoomNotFoundRpcException<PostponeBookingResponse>(),
 
             _ => throw new UnreachableException(),
         };
@@ -98,13 +93,10 @@ public class BookingController(
                 BookingId = submitted.BookingId.Value,
             },
 
-            SubmitBooking.Result.RoomNotFound _ => throw new RpcException(new Status(
-                StatusCode.NotFound,
-                "Room not found")),
+            SubmitBooking.Result.RoomNotFound _ => ThrowRoomNotFoundRpcException<SubmitBookingResponse>(),
 
-            SubmitBooking.Result.InvalidBookingState invalidBookingState => throw new RpcException(new Status(
-                StatusCode.NotFound,
-                $"Invalid booking state: {invalidBookingState.BookingState}")),
+            SubmitBooking.Result.InvalidBookingState invalidBookingState =>
+                ThrowInvalidBookingStateRpcException<SubmitBookingResponse>(invalidBookingState.BookingState),
 
             _ => throw new UnreachableException(),
         };
@@ -126,13 +118,10 @@ public class BookingController(
                 BookingId = completed.BookingId.Value,
             },
 
-            CompleteBooking.Result.RoomNotFound _ => throw new RpcException(new Status(
-                StatusCode.NotFound,
-                "Room not found")),
+            CompleteBooking.Result.RoomNotFound _ => ThrowRoomNotFoundRpcException<CompleteBookingResponse>(),
 
-            CompleteBooking.Result.InvalidBookingState invalidBookingState => throw new RpcException(new Status(
-                StatusCode.NotFound,
-                $"Invalid booking state: {invalidBookingState.BookingState}")),
+            CompleteBooking.Result.InvalidBookingState invalidBookingState =>
+                ThrowInvalidBookingStateRpcException<CompleteBookingResponse>(invalidBookingState.BookingState),
 
             _ => throw new UnreachableException(),
         };
@@ -154,13 +143,41 @@ public class BookingController(
                 BookingId = cancelled.BookingId.Value,
             },
 
-            CancelBooking.Result.RoomNotFound _ => throw new RpcException(new Status(
-                StatusCode.NotFound,
-                "Room not found")),
+            CancelBooking.Result.RoomNotFound _ => ThrowRoomNotFoundRpcException<CancelBookingResponse>(),
 
-            CancelBooking.Result.InvalidBookingState invalidBookingState => throw new RpcException(new Status(
-                StatusCode.NotFound,
-                $"Invalid booking state: {invalidBookingState.BookingState}")),
+            CancelBooking.Result.InvalidBookingState invalidBookingState =>
+                ThrowInvalidBookingStateRpcException<CancelBookingResponse>(invalidBookingState.BookingState),
+
+            _ => throw new UnreachableException(),
+        };
+    }
+
+    public override async Task<GetRoomAvailableDateRangesResponse> GetRoomAvailableDateRanges(
+        GetRoomAvailableDateRangesRequest request,
+        ServerCallContext context)
+    {
+        var rangesRequest = new Application.Contracts.Bookings.Operations.GetRoomAvailableDateRanges.Request(
+            new RoomId(request.RoomId),
+            request.StartDate.ToDateTimeOffset(),
+            request.EndDate.ToDateTimeOffset());
+
+        var result = await reservationService.GetRoomAvailableDateRangesAsync(rangesRequest, context.CancellationToken);
+
+        return result switch
+        {
+            GetRoomAvailableDateRanges.Result.Success success => new GetRoomAvailableDateRangesResponse
+            {
+                Available =
+                {
+                    success.Ranges.Select(range => new GetRoomAvailableDateRangesResponse.Types.Range
+                    {
+                        Start = range.Start.ToTimestamp(),
+                        End = range.End.ToTimestamp(),
+                    }).ToArray(),
+                },
+            },
+            GetRoomAvailableDateRanges.Result.RoomNotFound _ =>
+                ThrowRoomNotFoundRpcException<GetRoomAvailableDateRangesResponse>(),
 
             _ => throw new UnreachableException(),
         };
@@ -176,5 +193,22 @@ public class BookingController(
             Application.Models.Enums.BookingState.Completed => BookingState.Completed,
             _ => BookingState.Unspecified,
         };
+    }
+
+    private static T ThrowRoomNotFoundRpcException<T>()
+    {
+        throw new RpcException(new Status(StatusCode.NotFound, "Room not found"));
+    }
+
+    private static T ThrowInvalidBookingStateRpcException<T>(BookingService.Application.Models.Enums.BookingState bookingState)
+    {
+        throw new RpcException(new Status(
+            StatusCode.InvalidArgument,
+            $"Invalid booking state: {bookingState}"));
+    }
+
+    private static T ThrowRoomNotAvailableRpcException<T>()
+    {
+        throw new RpcException(new Status(StatusCode.InvalidArgument, "Room not available"));
     }
 }

@@ -33,6 +33,11 @@ service BookingService {
       get: "/v1/bookings/cancel"
     };
   };
+  rpc GetRoomAvailableDateRanges(GetRoomAvailableDateRangesRequest) returns (GetRoomAvailableDateRangesResponse) {
+    option (google.api.http) = {
+      get: "/v1/bookings/ranges"
+    };
+  };
 }
 
 enum BookingState {
@@ -104,4 +109,22 @@ message CancelBookingRequest {
 
 message CancelBookingResponse {
   int64 booking_id = 1;
+}
+
+// GetRoomAvailableDateRanges
+
+message GetRoomAvailableDateRangesRequest {
+  int64 room_id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+}
+
+message GetRoomAvailableDateRangesResponse {
+
+  repeated Range available = 1;
+
+  message Range {
+    google.protobuf.Timestamp start = 1;
+    google.protobuf.Timestamp end = 2;
+  };
 }

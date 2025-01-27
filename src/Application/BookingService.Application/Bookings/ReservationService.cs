@@ -24,12 +24,8 @@ public class ReservationService(
         CreateBooking.Request request,
         CancellationToken cancellationToken)
     {
-        if (!await accommodationGateway.RoomExistsAsync(
-                request.RoomId,
-                cancellationToken))
-        {
+        if (!await accommodationGateway.RoomExistsAsync(request.RoomId, cancellationToken))
             return new CreateBooking.Result.RoomNotFound();
-        }
 
         await using IPersistenceTransaction transaction = await transactionProvider.BeginTransactionAsync(
             IsolationLevel.ReadCommitted,
@@ -45,30 +41,27 @@ public class ReservationService(
             return new CreateBooking.Result.RoomNotAvailable();
         }
 
-        BookingInfo bookingInfo = await persistenceContext.BookingInfos.AddAsync(
-            new BookingInfo(
-                BookingInfoId.Default,
-                request.RoomId,
-                request.UserEmail,
-                request.CheckInDate,
-                request.CheckOutDate),
-            cancellationToken);
-
         Booking booking = await persistenceContext.Bookings.AddAsync(
             new Booking(
                 BookingId.Default,
                 BookingState.Created,
-                bookingInfo.BookingInfoId,
+                new BookingInfo(
+                    BookingInfoId.Default,
+                    BookingId.Default,
+                    request.RoomId,
+                    request.UserEmail,
+                    request.CheckInDate,
+                    request.CheckOutDate),
                 DateTimeOffset.UtcNow),
             cancellationToken);
 
         var evt = new BookingCreatedEvent(
             booking.BookingId,
             booking.BookingState,
-            bookingInfo.BookingInfoRoomId,
-            bookingInfo.BookingInfoUserEmail,
-            bookingInfo.BookingInfoCheckInDate,
-            bookingInfo.BookingInfoCheckOutDate);
+            booking.BookingInfo.BookingInfoRoomId,
+            booking.BookingInfo.BookingInfoUserEmail,
+            booking.BookingInfo.BookingInfoCheckInDate,
+            booking.BookingInfo.BookingInfoCheckOutDate);
 
         await eventPublisher.PublishAsync(evt, cancellationToken);
 
@@ -77,10 +70,10 @@ public class ReservationService(
         return new CreateBooking.Result.Created(
             booking.BookingId,
             booking.BookingState,
-            bookingInfo.BookingInfoRoomId,
-            bookingInfo.BookingInfoUserEmail,
-            bookingInfo.BookingInfoCheckInDate,
-            bookingInfo.BookingInfoCheckOutDate,
+            booking.BookingInfo.BookingInfoRoomId,
+            booking.BookingInfo.BookingInfoUserEmail,
+            booking.BookingInfo.BookingInfoCheckInDate,
+            booking.BookingInfo.BookingInfoCheckOutDate,
             booking.BookingCreatedAt);
     }
 
@@ -99,49 +92,40 @@ public class ReservationService(
             .FirstOrDefaultAsync(cancellationToken);
 
         if (booking is null)
-        {
             return new PostponeBooking.Result.RoomNotFound();
-        }
 
         List<BookingState> validStates = [BookingState.Created];
         if (!validStates.Contains(booking.BookingState))
-        {
             return new PostponeBooking.Result.InvalidBookingState(booking.BookingState);
-        }
-
-        BookingInfoQuery bookingInfoQuery = new BookingInfoQuery.Builder()
-            .WithBookingInfoId(booking.BookingInfoId)
-            .WithPageSize(1)
-            .Build();
-
-        BookingInfo bookingInfo = await persistenceContext.BookingInfos.QueryAsync(bookingInfoQuery, cancellationToken)
-            .FirstAsync(cancellationToken);
 
         if (!await RoomAvailableAsync(
-                bookingInfo.BookingInfoRoomId,
+                booking.BookingInfo.BookingInfoRoomId,
                 request.NewCheckInDate,
                 request.NewCheckOutDate,
-                bookingInfo.BookingInfoId,
+                booking.BookingId,
                 cancellationToken))
         {
             return new PostponeBooking.Result.RoomNotAvailable();
         }
 
-        BookingInfo updatedBookingInfo = await persistenceContext.BookingInfos.UpdateAsync(
-            bookingInfo with
+        Booking updatedBooking = await persistenceContext.Bookings.UpdateAsync(
+            booking with
             {
-                BookingInfoCheckInDate = request.NewCheckInDate,
-                BookingInfoCheckOutDate = request.NewCheckOutDate,
+                BookingInfo = booking.BookingInfo with
+                {
+                    BookingInfoCheckInDate = request.NewCheckInDate,
+                    BookingInfoCheckOutDate = request.NewCheckOutDate,
+                },
             },
             cancellationToken);
 
         var evt = new BookingUpdatedEvent(
-            booking.BookingId,
-            booking.BookingState,
-            updatedBookingInfo.BookingInfoRoomId,
-            updatedBookingInfo.BookingInfoUserEmail,
-            updatedBookingInfo.BookingInfoCheckInDate,
-            updatedBookingInfo.BookingInfoCheckOutDate);
+            updatedBooking.BookingId,
+            updatedBooking.BookingState,
+            updatedBooking.BookingInfo.BookingInfoRoomId,
+            updatedBooking.BookingInfo.BookingInfoUserEmail,
+            updatedBooking.BookingInfo.BookingInfoCheckInDate,
+            updatedBooking.BookingInfo.BookingInfoCheckOutDate);
 
         await eventPublisher.PublishAsync(evt, cancellationToken);
 
@@ -149,8 +133,8 @@ public class ReservationService(
 
         return new PostponeBooking.Result.Updated(
             booking.BookingId,
-            updatedBookingInfo.BookingInfoCheckInDate,
-            updatedBookingInfo.BookingInfoCheckOutDate);
+            updatedBooking.BookingInfo.BookingInfoCheckInDate,
+            updatedBooking.BookingInfo.BookingInfoCheckOutDate);
     }
 
     public async Task<SubmitBooking.Result> SubmitBookingAsync(SubmitBooking.Request request, CancellationToken cancellationToken)
@@ -181,7 +165,7 @@ public class ReservationService(
         {
             BookingId bookingId = await UpdateBookingState(
                 request.BookingId,
-                BookingState.Submitted,
+                BookingState.Completed,
                 [BookingState.Submitted],
                 cancellationToken);
 
@@ -219,6 +203,59 @@ public class ReservationService(
         }
     }
 
+    public async Task<GetRoomAvailableDateRanges.Result> GetRoomAvailableDateRangesAsync(GetRoomAvailableDateRanges.Request request, CancellationToken cancellationToken)
+    {
+        if (!await accommodationGateway.RoomExistsAsync(request.RoomId, cancellationToken))
+            return new GetRoomAvailableDateRanges.Result.RoomNotFound();
+
+        BookingQuery bookingsQuery = new BookingQuery.Builder()
+            .WithBookingInfoDateRange((request.StartDate, request.EndDate))
+            .WithPageSize(int.MaxValue)
+            .Build();
+
+        IAsyncEnumerable<Booking> bookings = persistenceContext.Bookings.QueryAsync(bookingsQuery, cancellationToken);
+
+        IReadOnlyCollection<(DateTimeOffset Start, DateTimeOffset End)> bookingsRanges = await bookings
+            .Select(
+                booking => (
+                    booking.BookingInfo.BookingInfoCheckInDate,
+                    booking.BookingInfo.BookingInfoCheckOutDate))
+            .ToListAsync(cancellationToken);
+
+        var availableRanges = GetAvailableRanges(
+            bookingsRanges,
+            request.StartDate,
+            request.EndDate);
+
+        return new GetRoomAvailableDateRanges.Result.Success(availableRanges);
+    }
+
+    private static IReadOnlyCollection<(DateTimeOffset Start, DateTimeOffset End)> GetAvailableRanges(
+        IReadOnlyCollection<(DateTimeOffset Start, DateTimeOffset End)> bookedPeriods,
+        DateTimeOffset searchStart,
+        DateTimeOffset searchEnd)
+    {
+        var freePeriods = new List<(DateTimeOffset Start, DateTimeOffset End)>();
+        DateTimeOffset currentStart = searchStart;
+
+        foreach ((DateTimeOffset start, DateTimeOffset end) in bookedPeriods)
+        {
+            DateTimeOffset adjustedStart = start.AddDays(1);
+            DateTimeOffset adjustedEnd = end.AddDays(-1);
+
+            if (adjustedStart > currentStart)
+                freePeriods.Add((currentStart, adjustedStart));
+
+            if (adjustedEnd >= currentStart)
+                currentStart = adjustedEnd.AddDays(1);
+        }
+
+        if (currentStart < searchEnd)
+            freePeriods.Add((currentStart, searchEnd));
+
+        return freePeriods;
+    }
+
     private async Task<BookingId> UpdateBookingState(
         BookingId bookingId,
         BookingState bookingState,
@@ -239,30 +276,19 @@ public class ReservationService(
                           ?? throw new BookingNotFoundException();
 
         if (!validBookingStates.Contains(booking.BookingState))
-        {
             throw new InvalidBookingStateException(booking.BookingState);
-        }
 
-        Booking updatedBooking = await persistenceContext.Bookings.UpdateStateAsync(
-            booking.BookingId,
-            bookingState,
+        Booking updatedBooking = await persistenceContext.Bookings.UpdateAsync(
+            booking with { BookingState = bookingState },
             cancellationToken);
-
-        BookingInfoQuery bookingInfoQuery = new BookingInfoQuery.Builder()
-            .WithBookingInfoId(booking.BookingInfoId)
-            .WithPageSize(1)
-            .Build();
-
-        BookingInfo bookingInfo = await persistenceContext.BookingInfos.QueryAsync(bookingInfoQuery, cancellationToken)
-            .FirstAsync(cancellationToken);
 
         var evt = new BookingUpdatedEvent(
             updatedBooking.BookingId,
             updatedBooking.BookingState,
-            bookingInfo.BookingInfoRoomId,
-            bookingInfo.BookingInfoUserEmail,
-            bookingInfo.BookingInfoCheckInDate,
-            bookingInfo.BookingInfoCheckOutDate);
+            updatedBooking.BookingInfo.BookingInfoRoomId,
+            updatedBooking.BookingInfo.BookingInfoUserEmail,
+            updatedBooking.BookingInfo.BookingInfoCheckInDate,
+            updatedBooking.BookingInfo.BookingInfoCheckOutDate);
 
         await eventPublisher.PublishAsync(evt, cancellationToken);
 
@@ -275,14 +301,14 @@ public class ReservationService(
         RoomId roomId,
         DateTimeOffset checkInDate,
         DateTimeOffset checkOutDate,
-        BookingInfoId? bookingInfoId,
+        BookingId? bookingId,
         CancellationToken cancellationToken)
     {
-        return !await persistenceContext.BookingInfos.QueryAsync(
-                new BookingInfoQuery.Builder()
-                    .WithRoomId(roomId)
-                    .WithBookingInfoToExcludeIds(bookingInfoId is null ? [] : [bookingInfoId.Value])
-                    .WithDateRange(new BookingInfoQuery.DateRangeModel(checkInDate, checkOutDate))
+        return !await persistenceContext.Bookings.QueryAsync(
+                new BookingQuery.Builder()
+                    .WithBookingInfoRoomId(roomId)
+                    .WithBookingToExcludeIds(bookingId is null ? [] : [bookingId.Value])
+                    .WithBookingInfoDateRange((checkInDate, checkOutDate))
                     .WithPageSize(1)
                     .Build(),
                 cancellationToken)
