@@ -10,32 +10,37 @@ import "google/protobuf/timestamp.proto";
 service BookingService {
   rpc CreateBooking(CreateBookingRequest) returns (CreateBookingResponse) {
     option (google.api.http) = {
-      get: "/v1/bookings/create"
+      post: "/v1/bookings/create",
+      body: "*"
     };
   };
   rpc PostponeBooking(PostponeBookingRequest) returns (PostponeBookingResponse) {
     option (google.api.http) = {
-      get: "/v1/bookings/postpone"
+      post: "/v1/bookings/postpone",
+      body: "*"
     };
   };
   rpc SubmitBooking(SubmitBookingRequest) returns (SubmitBookingResponse) {
     option (google.api.http) = {
-      get: "/v1/bookings/submit"
+      post: "/v1/bookings/submit",
+      body: "*"
     };
   };
   rpc CompleteBooking(CompleteBookingRequest) returns (CompleteBookingResponse) {
     option (google.api.http) = {
-      get: "/v1/bookings/complete"
+      post: "/v1/bookings/complete",
+      body: "*"
     };
   };
   rpc CancelBooking(CancelBookingRequest) returns (CancelBookingResponse) {
     option (google.api.http) = {
-      get: "/v1/bookings/cancel"
+      get: "/v1/bookings/cancel",
+      body: "*"
     };
   };
   rpc GetRoomAvailableDateRanges(GetRoomAvailableDateRangesRequest) returns (GetRoomAvailableDateRangesResponse) {
     option (google.api.http) = {
-      get: "/v1/bookings/ranges"
+      get: "/v1/bookings/ranges/{room_id}"
     };
   };
 }
