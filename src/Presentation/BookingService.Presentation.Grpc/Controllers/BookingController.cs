@@ -161,7 +161,9 @@ public class BookingController(
             request.StartDate.ToDateTimeOffset(),
             request.EndDate.ToDateTimeOffset());
 
-        var result = await reservationService.GetRoomAvailableDateRangesAsync(rangesRequest, context.CancellationToken);
+        GetRoomAvailableDateRanges.Result result = await reservationService.GetRoomAvailableDateRangesAsync(
+            rangesRequest,
+            context.CancellationToken);
 
         return result switch
         {

@@ -21,12 +21,11 @@ message BookingKey {
 message BookingValue {
   
   oneof event {
-    BookingSubmission booking_submission = 1;
+    BookingCreated booking_created = 1;
     BookingUpdate booking_update = 2;
-    BookingCancellation booking_cancellation = 3;
   }
   
-  message BookingSubmission {
+  message BookingCreated {
     int64 booking_id = 1;
     BookingState booking_state = 2;
     string user_email = 3;
@@ -37,15 +36,6 @@ message BookingValue {
   }
 
   message BookingUpdate {
-    int64 booking_id = 1;
-    BookingState booking_state = 2;
-    string user_email = 3;
-    int64 room_id = 5;
-    google.protobuf.Timestamp check_in_date = 6;
-    google.protobuf.Timestamp check_out_date = 7;
-  }
-
-  message BookingCancellation {
     int64 booking_id = 1;
     BookingState booking_state = 2;
     string user_email = 3;

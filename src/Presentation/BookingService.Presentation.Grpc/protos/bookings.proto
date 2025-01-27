@@ -34,7 +34,7 @@ service BookingService {
   };
   rpc CancelBooking(CancelBookingRequest) returns (CancelBookingResponse) {
     option (google.api.http) = {
-      get: "/v1/bookings/cancel",
+      post: "/v1/bookings/cancel",
       body: "*"
     };
   };
