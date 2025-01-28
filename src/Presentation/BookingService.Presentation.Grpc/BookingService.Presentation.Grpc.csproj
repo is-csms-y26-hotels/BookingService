@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="Google.Api.CommonProtos" GeneratePathProperty="true"/>
+        <PackageReference Include="Google.Protobuf" />
+        <PackageReference Include="Grpc.AspNetCore"/>
+        <PackageReference Include="Grpc.AspNetCore.Server.Reflection"/>
+        <PackageReference Include="Grpc.Tools">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Itmo.Dev.Platform.Grpc" />
+        <PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" />
+        <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" />
+        <PackageReference Include="Swashbuckle.AspNetCore" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="protos\**\*.proto" GrpcServices="Server" AdditionalImportDirs="$(PkgGoogle_Api_CommonProtos)/content/protos"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Application\BookingService.Application.Contracts\BookingService.Application.Contracts.csproj"/>
+    </ItemGroup>
+
+</Project>

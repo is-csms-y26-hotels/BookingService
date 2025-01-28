@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+package bookings;
+
+option csharp_namespace = "Bookings.BookingsService.Contracts";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service BookingService {
+  rpc CreateBooking(CreateBookingRequest) returns (CreateBookingResponse) {
+    option (google.api.http) = {
+      post: "/v1/bookings/create",
+      body: "*"
+    };
+  };
+  rpc PostponeBooking(PostponeBookingRequest) returns (PostponeBookingResponse) {
+    option (google.api.http) = {
+      post: "/v1/bookings/postpone",
+      body: "*"
+    };
+  };
+  rpc SubmitBooking(SubmitBookingRequest) returns (SubmitBookingResponse) {
+    option (google.api.http) = {
+      post: "/v1/bookings/submit",
+      body: "*"
+    };
+  };
+  rpc CompleteBooking(CompleteBookingRequest) returns (CompleteBookingResponse) {
+    option (google.api.http) = {
+      post: "/v1/bookings/complete",
+      body: "*"
+    };
+  };
+  rpc CancelBooking(CancelBookingRequest) returns (CancelBookingResponse) {
+    option (google.api.http) = {
+      post: "/v1/bookings/cancel",
+      body: "*"
+    };
+  };
+  rpc GetRoomAvailableDateRanges(GetRoomAvailableDateRangesRequest) returns (GetRoomAvailableDateRangesResponse) {
+    option (google.api.http) = {
+      get: "/v1/bookings/ranges/{room_id}"
+    };
+  };
+}
+
+enum BookingState {
+  BOOKING_STATE_UNSPECIFIED = 0;
+  BOOKING_STATE_CREATED = 1;
+  BOOKING_STATE_SUBMITTED = 3;
+  BOOKING_STATE_CANCELLED = 4;
+  BOOKING_STATE_COMPLETED = 5;
+}
+
+// CreateBooking
+
+message CreateBookingRequest {
+  string user_email = 1;
+  int64 room_id = 3;
+  google.protobuf.Timestamp check_in_date = 4;
+  google.protobuf.Timestamp check_out_date = 5;
+}
+
+message CreateBookingResponse {
+  int64 booking_id = 1;
+  BookingState booking_state = 2;
+  string user_email = 3;
+  int64 room_id = 5;
+  google.protobuf.Timestamp check_in_date = 6;
+  google.protobuf.Timestamp check_out_date = 7;
+  google.protobuf.Timestamp created_at = 8;
+}
+
+// PostponeBooking
+
+message PostponeBookingRequest {
+  int64 booking_id = 1;
+  google.protobuf.Timestamp new_check_in_date = 4;
+  google.protobuf.Timestamp new_check_out_date = 5;
+}
+
+message PostponeBookingResponse {
+  int64 booking_id = 1;
+  google.protobuf.Timestamp check_in_date = 6;
+  google.protobuf.Timestamp check_out_date = 7;
+}
+
+// Submit booking
+
+message SubmitBookingRequest {
+  int64 booking_id = 1;
+}
+
+message SubmitBookingResponse {
+  int64 booking_id = 1;
+}
+
+// Complete booking
+
+message CompleteBookingRequest {
+  int64 booking_id = 1;
+}
+
+message CompleteBookingResponse {
+  int64 booking_id = 1;
+}
+
+// Cancel booking
+
+message CancelBookingRequest {
+  int64 booking_id = 1;
+}
+
+message CancelBookingResponse {
+  int64 booking_id = 1;
+}
+
+// GetRoomAvailableDateRanges
+
+message GetRoomAvailableDateRangesRequest {
+  int64 room_id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+}
+
+message GetRoomAvailableDateRangesResponse {
+
+  repeated Range available = 1;
+
+  message Range {
+    google.protobuf.Timestamp start = 1;
+    google.protobuf.Timestamp end = 2;
+  };
+}

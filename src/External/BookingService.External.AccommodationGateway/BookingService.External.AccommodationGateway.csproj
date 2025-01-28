@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Grpc.AspNetCore"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="protos\**\*.proto" GrpcServices="Client"/>
+        <Protobuf Update="protos\rooms.proto">
+          <Access>Public</Access>
+          <ProtoCompile>True</ProtoCompile>
+          <CompileOutputs>True</CompileOutputs>
+          <OutputDir>obj\Debug\net8.0\</OutputDir>
+        </Protobuf>
+    </ItemGroup>
+
+</Project>
