@@ -6,14 +6,6 @@ option csharp_namespace = "Bookings.Kafka.Contracts";
 
 import "google/protobuf/timestamp.proto";
 
-enum BookingState {
-  BOOKING_STATE_UNSPECIFIED = 0;
-  BOOKING_STATE_CREATED = 1;
-  BOOKING_STATE_SUBMITTED = 3;
-  BOOKING_STATE_CANCELLED = 4;
-  BOOKING_STATE_COMPLETED = 5;
-}
-
 message BookingKey {
   int64 booking_id = 1;
 }
@@ -24,15 +16,22 @@ message BookingValue {
     BookingCreated booking_created = 1;
     BookingUpdated booking_updated = 2;
   }
-  
+
+  enum BookingState {
+    BOOKING_STATE_UNSPECIFIED = 0;
+    BOOKING_STATE_CREATED = 1;
+    BOOKING_STATE_SUBMITTED = 3;
+    BOOKING_STATE_CANCELLED = 4;
+    BOOKING_STATE_COMPLETED = 5;
+  }
+
   message BookingCreated {
     int64 booking_id = 1;
-    BookingState booking_state = 2;
-    string user_email = 3;
-    int64 room_id = 5;
-    google.protobuf.Timestamp check_in_date = 6;
-    google.protobuf.Timestamp check_out_date = 7;
-    google.protobuf.Timestamp created_at = 8;
+    string user_email = 2;
+    int64 room_id = 3;
+    google.protobuf.Timestamp check_in_date = 4;
+    google.protobuf.Timestamp check_out_date = 5;
+    google.protobuf.Timestamp created_at = 7;
   }
 
   message BookingUpdated {

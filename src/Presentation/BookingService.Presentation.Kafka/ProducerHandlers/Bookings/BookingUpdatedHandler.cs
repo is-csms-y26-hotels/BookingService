@@ -1,5 +1,6 @@
 ﻿using Bookings.Kafka.Contracts;
 using BookingService.Application.Contracts.Bookings.Events;
+using BookingService.Application.Models.Enums;
 using Google.Protobuf.WellKnownTypes;
 using Itmo.Dev.Platform.Events;
 using Itmo.Dev.Platform.Kafka.Extensions;
@@ -31,15 +32,15 @@ internal class BookingUpdatedHandler(
         await producer.ProduceAsync(message, cancellationToken);
     }
 
-    private static BookingState MapBookingStateEnum(Application.Models.Enums.BookingState bookingState)
+    private static BookingValue.Types.BookingState MapBookingStateEnum(BookingState bookingState)
     {
         return bookingState switch
         {
-            Application.Models.Enums.BookingState.Created => BookingState.Created,
-            Application.Models.Enums.BookingState.Submitted => BookingState.Submitted,
-            Application.Models.Enums.BookingState.Cancelled => BookingState.Cancelled,
-            Application.Models.Enums.BookingState.Completed => BookingState.Completed,
-            _ => BookingState.Unspecified,
+            BookingState.Created => BookingValue.Types.BookingState.Created,
+            BookingState.Submitted => BookingValue.Types.BookingState.Submitted,
+            BookingState.Cancelled => BookingValue.Types.BookingState.Cancelled,
+            BookingState.Completed => BookingValue.Types.BookingState.Completed,
+            _ => BookingValue.Types.BookingState.Unspecified,
         };
     }
 }
