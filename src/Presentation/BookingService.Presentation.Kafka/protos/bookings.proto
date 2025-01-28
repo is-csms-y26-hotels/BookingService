@@ -22,7 +22,7 @@ message BookingValue {
   
   oneof event {
     BookingCreated booking_created = 1;
-    BookingUpdate booking_update = 2;
+    BookingUpdated booking_updated = 2;
   }
   
   message BookingCreated {
@@ -35,7 +35,7 @@ message BookingValue {
     google.protobuf.Timestamp created_at = 8;
   }
 
-  message BookingUpdate {
+  message BookingUpdated {
     int64 booking_id = 1;
     BookingState booking_state = 2;
     string user_email = 3;

@@ -16,7 +16,7 @@ internal class BookingUpdatedHandler(
 
         var value = new BookingValue
         {
-            BookingUpdate = new BookingValue.Types.BookingUpdate
+            BookingUpdated = new BookingValue.Types.BookingUpdated
             {
                 BookingId = evt.BookingId.Value,
                 BookingState = MapBookingStateEnum(evt.BookingState),
