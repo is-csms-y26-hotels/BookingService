@@ -1,5 +1,5 @@
-﻿using BookingService.Application.Abstractions.Gateways;
-using BookingService.Infrastructure.Gateways.Gateways;
+﻿using BookingService.Infrastructure.Gateways.Gateways;
+using Itmo.Dev.Platform.Grpc.Clients;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BookingService.Infrastructure.Gateways;
@@ -8,8 +8,10 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddInfrastructureGateways(this IServiceCollection collection)
     {
-        // TODO add grpc client
-        collection.AddScoped<IAccommodationGateway, AccommodationGateway>();
+        collection.AddPlatformGrpcClients(clients => clients
+            .AddAccommodationGatewayClient());
+
+        collection.AddAccommodationGateway();
 
         return collection;
     }

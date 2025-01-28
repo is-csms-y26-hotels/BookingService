@@ -8,6 +8,18 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Application\BookingService.Application.Abstractions\BookingService.Application.Abstractions.csproj" />
+      <ProjectReference Include="..\..\External\BookingService.External.AccommodationGateway\BookingService.External.AccommodationGateway.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Google.Protobuf" />
+      <PackageReference Include="Grpc.Net.Client" />
+      <PackageReference Include="Grpc.Net.ClientFactory" />
+      <PackageReference Include="Grpc.Tools">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Itmo.Dev.Platform.Grpc" />
     </ItemGroup>
 
 </Project>
