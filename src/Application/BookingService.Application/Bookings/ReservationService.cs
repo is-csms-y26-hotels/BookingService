@@ -57,11 +57,11 @@ public class ReservationService(
 
         var evt = new BookingCreatedEvent(
             booking.BookingId,
-            booking.BookingState,
             booking.BookingInfo.BookingInfoRoomId,
             booking.BookingInfo.BookingInfoUserEmail,
             booking.BookingInfo.BookingInfoCheckInDate,
-            booking.BookingInfo.BookingInfoCheckOutDate);
+            booking.BookingInfo.BookingInfoCheckOutDate,
+            booking.BookingCreatedAt);
 
         await eventPublisher.PublishAsync(evt, cancellationToken);
 

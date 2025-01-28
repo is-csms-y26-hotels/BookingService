@@ -19,27 +19,15 @@ internal class BookingCreatedHandler(
             BookingCreated = new BookingValue.Types.BookingCreated
             {
                 BookingId = evt.BookingId.Value,
-                BookingState = MapBookingStateEnum(evt.BookingState),
                 RoomId = evt.BookingRoomId.Value,
                 UserEmail = evt.BookingUserEmail.Value,
                 CheckInDate = evt.BookingCheckInDate.ToTimestamp(),
                 CheckOutDate = evt.BookingCheckOutDate.ToTimestamp(),
+                CreatedAt = evt.BookingCreatedAt.ToTimestamp(),
             },
         };
 
         var message = new KafkaProducerMessage<BookingKey, BookingValue>(key, value);
         await producer.ProduceAsync(message, cancellationToken);
-    }
-
-    private static BookingState MapBookingStateEnum(Application.Models.Enums.BookingState bookingState)
-    {
-        return bookingState switch
-        {
-            Application.Models.Enums.BookingState.Created => BookingState.Created,
-            Application.Models.Enums.BookingState.Submitted => BookingState.Submitted,
-            Application.Models.Enums.BookingState.Cancelled => BookingState.Cancelled,
-            Application.Models.Enums.BookingState.Completed => BookingState.Completed,
-            _ => BookingState.Unspecified,
-        };
     }
 }
